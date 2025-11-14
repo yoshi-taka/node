@@ -52,7 +52,7 @@ jobs:
       - name: Setup Dev Drive (Windows only)
         uses: samypr100/setup-dev-drive@v4
         with:
-          drive-size: 4GB
+          drive-size: 8GB
           workspace-copy: true
       - name: Set WORKDIR to Dev Drive
         run: echo "WORKDIR=$env:DEV_DRIVE_WORKSPACE" >> $env:GITHUB_ENV
