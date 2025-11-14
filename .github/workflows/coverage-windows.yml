@@ -17,6 +17,7 @@ on:
   push:
     branches:
       - main
+      - ddrive
     paths:
       - lib/**/*.js
       - vcbuild.bat
@@ -45,6 +46,11 @@ jobs:
     if: github.event.pull_request.draft == false
     runs-on: windows-2025
     steps:
+      - name: Check drives (D detection)
+        shell: pwsh
+        run: |
+          Write-Host "=== FileSystem drives ==="
+          Get-PSDrive -PSProvider FileSystem
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5.0.0
         with:
           persist-credentials: false
@@ -71,7 +77,3 @@ jobs:
           NODE_OPTIONS: --max-old-space-size=8192
       - name: Clean tmp
         run: npx rimraf ./coverage/tmp
-      - name: Upload
-        uses: codecov/codecov-action@5a1091511ad55cbe89839c7260b706298ca349f7  # v5.5.1
-        with:
-          directory: ./coverage
