@@ -49,8 +49,16 @@ jobs:
       - name: Check drives (D detection)
         shell: pwsh
         run: |
-          Write-Host "=== FileSystem drives ==="
-          Get-PSDrive -PSProvider FileSystem
+          if (Test-Path 'D:\') {
+            Write-Host "🎯 D: drive is available. We'll be able to offload heavy I/O there."
+            New-Item -ItemType Directory -Force -Path 'D:\pip-cache' | Out-Null
+            New-Item -ItemType Directory -Force -Path 'D:\temp'      | Out-Null
+            "PIP_CACHE_DIR=D:\pip-cache" >> $env:GITHUB_ENV
+            "TEMP=D:\temp"               >> $env:GITHUB_ENV
+            "TMP=D:\temp"                >> $env:GITHUB_ENV
+
+            "npm_config_cache=D:\npm-cache" >> $env:GITHUB_ENV
+          } 
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5.0.0
         with:
           persist-credentials: false
